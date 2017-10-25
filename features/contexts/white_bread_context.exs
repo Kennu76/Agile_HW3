@@ -16,6 +16,7 @@ defmodule WhiteBreadContext do
   scenario_finalize fn _status, _state -> 
     Ecto.Adapters.SQL.Sandbox.checkin(Takso.Repo)
     Hound.end_session
+    
   end
 
   given_ ~r/^STRS's ride history includes the following trips$/, 

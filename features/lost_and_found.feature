@@ -20,3 +20,4 @@ Feature: Lost and found feature
     Then the operator should see 6 rows
     When the operator enters "Puusepa 8" as pickup address
     Then the operator should see 2 rows
+
