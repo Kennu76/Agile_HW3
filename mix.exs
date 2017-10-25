@@ -45,6 +45,7 @@ defmodule Takso.Mixfile do
       {:white_bread, "~> 4.1", only: [:test]},
       {:hound, "~> 1.0", only: [:test]},
       {:timex, "~> 3.1"}
+      
     ]
   end
 
