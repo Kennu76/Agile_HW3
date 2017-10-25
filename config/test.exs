@@ -18,5 +18,5 @@ config :takso, Takso.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-config :hound, driver: "phantomjs"
+config :hound, driver: "chrome_driver"
 config :takso, sql_sandbox: true
