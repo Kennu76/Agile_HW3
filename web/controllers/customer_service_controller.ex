@@ -37,4 +37,11 @@ defmodule Takso.CustomerServiceController do
     
     render conn, "lost_and_found.html", changeset: changeset, trips: trips
   end
+
+
+  def scam_analysis(conn, params) do
+    changeset = CSRequest.changeset(%CSRequest{})
+    
+    render conn, "scam_analysis.html", changeset: changeset
+  end
 end
