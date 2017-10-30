@@ -39,11 +39,37 @@ defmodule Takso.CustomerServiceController do
   end
 
 
-  def scam_analysis(conn, _params) do
+  def scam_analysis(conn, params) do
     changeset = CSRequest.changeset(%CSRequest{})
     cBox25 = false;
     cBox50 = false;
-    trips = [];
+
+    # Check if params are there
+    if ( params != %{} ) do
+      # Do most of things here
+
+      # Get arguments
+      %{"cs_request" => request} = params
+      %{"date_of_incident" => date} = request
+      %{"taxi_id" => taxiId } = request
+      %{"checkbox_25plus" => _cBox25 } = request
+      %{"checkbox_50plus" => _cBox50 } = request
+      %{"pickup_address" => _pick_up_address } = request
+      %{"dropoff_address" => _drop_off_address } = request
+
+      # Reformat date
+      date = date |> Timex.parse!("%Y-%m-%d", :strftime) |> Ecto.Date.cast!
+
+      # Build query list
+      trips = Repo.all(Takso.Trip)
+    else
+      #IO.inspect Takso.Trip
+      trips = Repo.all(Takso.Trip)
+    end
+
+    trips = trips
     render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
+
   end
+
 end
