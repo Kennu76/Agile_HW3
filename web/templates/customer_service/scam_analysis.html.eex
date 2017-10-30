@@ -49,7 +49,7 @@
       <th>Date</th>
       <th>Pickup time</th>
       <th>Dropoff time</th>
-      <th>Est trip duration</th>      
+      <th>Est trip duration</th>
       <th>Pickup address</th>
       <th>Drop off address</th>
       <th>Taxi ID</th>

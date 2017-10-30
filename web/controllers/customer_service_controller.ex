@@ -39,8 +39,11 @@ defmodule Takso.CustomerServiceController do
   end
 
 
-  def scam_analysis(conn, params) do
+  def scam_analysis(conn, _params) do
     changeset = CSRequest.changeset(%CSRequest{})
-    render conn, "scam_analysis.html", changeset: changeset
+    cBox25 = false;
+    cBox50 = false;
+    trips = [];
+    render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
   end
 end
