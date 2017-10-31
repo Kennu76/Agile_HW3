@@ -40,9 +40,9 @@ defmodule Takso.CustomerServiceController do
 
 
   def scam_analysis(conn, params) do
-    changeset = CSRequest.changeset(%CSRequest{})
-    cBox25 = false;
-    cBox50 = false;
+     changeset = CSRequest.changeset(%CSRequest{})
+    # cBox25 = false;
+    # cBox50 = false;
 
     # Check if params are there
     if ( params != %{} ) do
@@ -52,11 +52,12 @@ defmodule Takso.CustomerServiceController do
       %{"cs_request" => request} = params
       %{"date_of_incident" => date} = request
       %{"taxi_id" => taxiId } = request
-      %{"checkbox_25plus" => _cBox25 } = request
-      %{"checkbox_50plus" => _cBox50 } = request
-      %{"pickup_address" => _pick_up_address } = request
-      %{"dropoff_address" => _drop_off_address } = request
-      query = from u in Takso.Trip, select: u
+      %{"checkbox_25plus" => cBox25 } = request
+      %{"checkbox_50plus" => cBox50 } = request
+      %{"pickup_address" => pick_up_address } = request
+      %{"dropoff_address" => drop_off_address } = request
+      
+      query = from u in Takso.Trip
       if date != "" do
         query = from u in query, where: u.date == ^date
       end
@@ -74,18 +75,28 @@ defmodule Takso.CustomerServiceController do
 
       query = from u in query, select: u
       # Reformat date
-      date = date |> Timex.parse!("%Y-%m-%d", :strftime) |> Ecto.Date.cast!
+      #date = date |> Timex.parse!("%Y-%m-%d", :strftime) |> Ecto.Date.cast!
 
       # Build query list
-      trips = Repo.all(Takso.Trip)
+      trips = Repo.all(query)
+      if Map.has_key?(params, "action") do
+        changeset = CSRequest.changeset(%CSRequest{})
+      else
+        changeset = CSRequest.changeset(%CSRequest{},request)
+      end
+    #   trips = trips
+    #   render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
     else
       #IO.inspect Takso.Trip
       trips = Repo.all(Takso.Trip)
+      cBox25 = false;
+      cBox50 = false;
+      # trips = trips
+      # render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
     end
-
+    
     trips = trips
     render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
-
   end
 
 end
