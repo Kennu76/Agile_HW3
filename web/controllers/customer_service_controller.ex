@@ -56,7 +56,23 @@ defmodule Takso.CustomerServiceController do
       %{"checkbox_50plus" => _cBox50 } = request
       %{"pickup_address" => _pick_up_address } = request
       %{"dropoff_address" => _drop_off_address } = request
+      query = from u in Takso.Trip, select: u
+      if date != "" do
+        query = from u in query, where: u.date == ^date
+      end
+      if taxiId != "" do
+        query = from u in query, where: u.taxi_id == ^taxiId
+      end
+      if pick_up_address != "" do
+        query = from u in query, where: u.pickup_address == ^pick_up_address
+      end
+      if drop_off_address != "" do
+        query = from u in query, where: u.dropoff_address == ^drop_off_address
+      end
 
+
+
+      query = from u in query, select: u
       # Reformat date
       date = date |> Timex.parse!("%Y-%m-%d", :strftime) |> Ecto.Date.cast!
 
