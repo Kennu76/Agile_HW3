@@ -40,9 +40,7 @@ defmodule Takso.CustomerServiceController do
 
 
   def scam_analysis(conn, params) do
-     changeset = CSRequest.changeset(%CSRequest{})
-    # cBox25 = false;
-    # cBox50 = false;
+    changeset = CSRequest.changeset(%CSRequest{})
 
     # Check if params are there
     if ( params != %{} ) do
@@ -56,7 +54,8 @@ defmodule Takso.CustomerServiceController do
       %{"checkbox_50plus" => cBox50 } = request
       %{"pickup_address" => pick_up_address } = request
       %{"dropoff_address" => drop_off_address } = request
-      
+
+      # Build query
       query = from u in Takso.Trip
       if date != "" do
         query = from u in query, where: u.date == ^date
@@ -70,32 +69,25 @@ defmodule Takso.CustomerServiceController do
       if drop_off_address != "" do
         query = from u in query, where: u.dropoff_address == ^drop_off_address
       end
-
-
-
       query = from u in query, select: u
-      # Reformat date
-      #date = date |> Timex.parse!("%Y-%m-%d", :strftime) |> Ecto.Date.cast!
 
-      # Build query list
+      # Query for trips
       trips = Repo.all(query)
+
+      # Change changeset
       if Map.has_key?(params, "action") do
         changeset = CSRequest.changeset(%CSRequest{})
       else
         changeset = CSRequest.changeset(%CSRequest{},request)
       end
-    #   trips = trips
-    #   render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
+
+    # IF PARAMS EMPTY
     else
-      #IO.inspect Takso.Trip
       trips = Repo.all(Takso.Trip)
       cBox25 = false;
       cBox50 = false;
-      # trips = trips
-      # render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
     end
-    
-    trips = trips
+    # Render
     render conn, "scam_analysis.html", changeset: changeset, checkbox_25plus: cBox25, checkbox_50plus: cBox50, trips: trips
   end
 
